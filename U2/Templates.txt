@@ -1,0 +1,141 @@
+Templates
+---------
+
+datos |> count(<variable>) |>
+	ggplot(aes(x = <variable>, y = n)) +
+	       geom_col(fill = "<nombre del color>") +
+	       geom_text(aes(label = n),
+			  position = position_stack(vjust = <posicion relativa>),
+			  color = "<color del texto>",
+			  size = <tamaño del texto>,
+			  fontface = "bold") +
+	       coord_flip() +
+	       labs(title = "<titulo>",
+		     subtitle = "<subtitulo>",
+		     x = "<nombre eje x>",
+		     y = "<nombre eje y>",
+		     caption = "<más detalles>") +
+	       theme_<nombre>()
+
+datos |>
+	ggplot(aes(x = <variable>)) +
+	       geom_bar(fill = "<nombre del color>") +
+	       geom_text(aes(label = after_stat(count)),
+		         stat = "count",
+			 position = position_stack(vjust = <posicion relativa>),
+			 color = "<color del texto>",
+			 size = <tamaño del texto>,
+			 fontface = "bold") +
+	       coord_flip() +
+	       labs(title = "<titulo>",
+		     subtitle = "<subtitulo>",
+		     x = "<nombre eje x>",
+		     y = "<nombre eje y>",
+		     caption = "<más detalles>") +
+	       theme_<nombre>()
+
+
+
+datos |>
+  count(<variable>) |>
+  mutate(prop = round(n / sum(n) * 100,1)) |>
+  ggplot(aes(x = 1, y = prop, fill = <variable>)) +
+  geom_col(col = "<nombre del color de línea>")+
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = <vector de colores>)+
+  geom_text(aes(label = paste(prop,"%")),
+	position = position_stack(vjust = <posición relativa del texto>),
+	color = "<color de texto>",
+	size = <tamaño de texto>) +
+  theme_void()
+
+
+library(ggmosaic)
+datos |>
+  ggplot() +
+  geom_mosaic(aes(x = product(<variable>), fill = <variable>)) +
+  labs(title = "<titulo>",
+       subtitle = "<subtitulo>",
+       x = "<nombre del eje x>",
+       y = "<nombre del eje y>",
+       caption = "<más detalles>") +
+  coord_flip() +
+  theme(legend.position = "none")
+
+library(treemapify)
+datos |> count(<variable>) |>
+  ggplot(aes(area = n, fill = <variable>, label = <variable>)) +
+  geom_treemap() +
+  geom_treemap_text(colour = "<color de texto>",
+                    place = "<left, centre o right>",
+                    grow = <FALSE si el texto es del mismo tamaño, TRUE si crece>,
+                    reflow = <FALSE si el texto va en una sola línea, FALSE en más de una línea>) +
+  scale_fill_manual(values = <vector de colores>) +
+  theme(legend.position = "none")
+
+
+datos |>
+  ggplot(aes(x = <variable>)) +
+  geom_histogram(binwidth = <ancho de barra>, 
+                 fill     = "<color de relleno>", 
+                 color    = "<color de línea>") +
+  labs(title = "<titulo>",
+       subtitle = "<subtitulo>",
+       x = "<nombre del eje x>",
+       y = "<nombre del eje y>",
+       caption = "<más detalles>") +
+  theme_<nombre>()
+
+
+datos |>
+  ggplot(aes(x = <variable>)) +
+  geom_density(fill = "<color de relleno>", 
+               color = "<color de línea>",
+               alpha = <opacidad, más oscuro es más cerca a 1>) +
+  labs(title = "<titulo>",
+       subtitle = "<subtitulo>",
+       x = "<nombre del eje x>",
+       y = "<nombre del eje y>",
+       caption = "<más detalles>") +
+  theme_<nombre>()
+
+datos |>
+  ggplot(aes(x = <variable>)) +
+  stat_ecdf(geom = "<step o point>", 
+            color = "<color de línea o punto>", 
+            linewidth = <ancho de línea>) +
+  labs(title = "<titulo>",
+       subtitle = "<subtitulo>",
+       x = "<nombre del eje x>",
+       y = "<nombre del eje y>",
+       caption = "<más detalles>") +
+  theme_<nombre>()
+
+datos |>
+  ggplot(aes(y = <variable>)) +
+  geom_boxplot(fill = "<color de relleno>", color = "<color de línea>") +
+  labs(title = "<titulo>",
+       y = "<variable>") +
+  scale_y_continuous(breaks = <puntos de corte de la variable>) + 
+  coord_flip()+
+  theme_minimal()+
+  theme(axis.text.y = element_blank())
+
+datos |>
+  ggplot(aes(x = "", y = <variable>)) +
+  geom_violin(trim = <TRUE si se trunca el violín>, 
+              alpha = <opacidad>, 
+              fill = "<color de relleno>", 
+              color = "<color de línea>") +
+  geom_boxplot(width = <ancho del boxplot>, 
+               alpha = <opacidad>, 
+               fill = "<color de relleno>", 
+               color = "<color de línea>"",
+               outlier.color = "<color de outlier>", 
+               outlier.shape = <forma de outlier>)+
+  coord_flip() +
+  labs(title = "<titulo>",
+       x = "",
+       y = "<eje y>") +
+  theme_<nombre>()
+
